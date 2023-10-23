@@ -6,5 +6,6 @@ app = Flask(__name__)
 @app.route('/')
 def hello_world():
     return "<b>My first Flask app!</b>"
+    #return {"message":"<b>Hello World!</b>"} #or you can return json
 
 

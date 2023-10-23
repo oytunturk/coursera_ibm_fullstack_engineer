@@ -22,3 +22,8 @@ flask run
 #Go to another command line and:
 #curl <ip_address_provided_by_flask>
 
+#You can also use this to avoid exporting environment variables:
+#flask run --app=app.y --debug
+
+#If the command line becomes too long, you can shorten it usin:
+#export PS1="[\[\033[01;32m\]\u\[\033[00m\]: \[\033[01;34m\]\W\[\033[00m\]]\$ "
