@@ -116,3 +116,39 @@ def name_search():
             return {"message": person}, 200
 
     return {"message": f'Error! {person_from_query} not found'}, 404
+
+@app.route("/count")
+def count():
+    try:
+        return {"data count": len(data)}, 200
+    except NameError:
+        return {"message": "data not defined"}, 500
+
+@app.route("/person/<uuid:var_name>")
+def find_by_uuid(var_name):
+    for person in data:
+        if person["id"] == str(var_name):
+            return person
+    return {"message": f'{str(var_name)} not found'}, 404
+
+@app.route("/person/<uuid:var_name>", methods=['DELETE'])
+def delete_by_uuid(var_name):
+    for person in data:
+        if person["id"] == str(var_name):
+            data.remove(person)
+            return {"message":"id of person deleted"}, 200
+    return {"message": "person not found"}, 404
+
+@app.route("/person", methods=['POST'])
+def add_by_uuid():
+    #new_person = {insert code to get json from request here}
+    new_person = request.json
+    if not new_person:
+        return {"message": "Invalid input parameter"}, 422
+    # code to validate new_person ommited
+    data.append(new_person)
+    return {"message": f"{new_person['id']}"}, 200
+
+@app.errorhandler(404)
+def error_404(error):
+    return {"message": "API not found"}, 404
