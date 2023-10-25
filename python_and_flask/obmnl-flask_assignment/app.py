@@ -101,8 +101,8 @@ def delete_transaction(transaction_id):
 def search_transactions():
     if request.method == 'POST':
         # Extract the min and max values from the form fields
-        min_amount = float(request.form['min'])
-        max_amount = float(request.form['max'])
+        min_amount = float(request.form['min_amount'])
+        max_amount = float(request.form['max_amount'])
         filtered = []
         for transaction in transactions:
             if transaction['amount']>=min and transaction['amount']<=max:
