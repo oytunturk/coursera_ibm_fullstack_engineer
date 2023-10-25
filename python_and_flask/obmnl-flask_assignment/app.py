@@ -19,7 +19,10 @@ transactions = [
 # Read operation
 @app.route('/')
 def get_transactions():
-    return render_template("transactions.html", transactions=transactions)
+    total = 0
+    for transaction in transactions:
+        total += float(transaction['amount'])
+    return render_template("transactions.html", transactions=transactions, total_balance=total)
 
 #Create a function named add_transaction.
 #Use add as the decorator for this function. Make sure to pass both GET and POST as possible methods.
@@ -39,7 +42,7 @@ def add_transaction():
             'amount': float(request.form['amount']),
         }
         transactions.append(transaction)
-        return redirect(url_for("get_transactions"))
+        return redirect(url_for("total_balance"))
     else:
         return {"message": "Error! Unsupported request"}, 404
 
@@ -66,7 +69,7 @@ def edit_transaction(transaction_id):
                 break
 
         # Redirect to the transactions list page
-        return redirect(url_for("get_transactions"))
+        return redirect(url_for("total_balance"))
     
     # Find the transaction with the matching ID and render the edit form
     for transaction in transactions:
@@ -86,7 +89,11 @@ def delete_transaction(transaction_id):
         if transaction['id'] == transaction_id:
             transactions.remove(transaction)
             break
-    return redirect(url_for("get_transactions"))
+    #Reorder transaction ids, otherwise it breaks editing logic after deletion
+    for ind, transaction in enumerate(transactions):
+        transaction['id'] = ind+1
+
+    return redirect(url_for("total_balance"))
 
 #Create a new function named search_transactions and use the @app.route decorator to map it to the URL /search.
 #Inside the function, check if the request method is POST. If it is, retrieve the minimum and maximum amount values from the form data submitted by the user.
@@ -97,7 +104,7 @@ def delete_transaction(transaction_id):
 #In this template, display the transactions similar to the existing transactions.html template.
 #If the request method is GET, render a new template called search.html.
 #This template should contain a form that allows users to input the minimum and maximum amount values for the search.
-@app.route('/search', methods=['POST'])
+@app.route('/search', methods=['GET', 'POST'])
 def search_transactions():
     if request.method == 'POST':
         # Extract the min and max values from the form fields
@@ -105,10 +112,22 @@ def search_transactions():
         max_amount = float(request.form['max_amount'])
         filtered = []
         for transaction in transactions:
-            if transaction['amount']>=min and transaction['amount']<=max:
+            amount = float(transaction['amount'])
+            if amount>=min_amount and amount<=max_amount:
                 filtered.append(transaction)
-        return render_template("search.html", transactions=filtered)
-    
+        return render_template("transactions.html", transactions=filtered)
+    elif request.method == 'GET':
+        return render_template("search.html")
+    else:
+        return {"message": "Error! Unsupported request"}, 404
+
+@app.route('/balance')
+def total_balance():
+    total = 0
+    for transaction in transactions:
+        total += float(transaction['amount'])
+    return render_template("transactions.html", transactions=transactions, total_balance=total)
+
 # Run the Flask app
 if __name__ == "__main__":
     app.run(debug=True)
