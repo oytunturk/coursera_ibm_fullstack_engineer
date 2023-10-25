@@ -31,15 +31,12 @@ def get_transactions():
 def add_transaction():
     if request.method == 'GET':
         return render_template("form.html")
-    elif request.method == 'POST':
-        # Access form data
-        name = request.form['name']
-        
+    elif request.method == 'POST':        
         # Redirect user to the new record
         transaction = {
-            'id': len(transactions)+1
-            'date': request.form['date']
-            'amount': float(request.form['amount'])
+            'id': len(transactions)+1,
+            'date': request.form['date'],
+            'amount': float(request.form['amount']),
         }
         transactions.append(transaction)
         return redirect(url_for("get_transactions"))
@@ -83,15 +80,35 @@ def edit_transaction(transaction_id):
 #In the function body, find the transaction with the ID that matches transaction_id and remove it from the transactions list,
 #then redirect the user back to the list of transactions.
 # Delete operation
-@app.route('/delete/<int:transaction_id>', methods=['DELETE'])
+@app.route('/delete/<int:transaction_id>')
 def delete_transaction(transaction_id):
-    if request.method == 'DELETE':
-        for transaction in transactions:
-            if transaction['id'] == transaction_id:
-                transactions.remove(transaction)
-                break
+    for transaction in transactions:
+        if transaction['id'] == transaction_id:
+            transactions.remove(transaction)
+            break
     return redirect(url_for("get_transactions"))
 
+#Create a new function named search_transactions and use the @app.route decorator to map it to the URL /search.
+#Inside the function, check if the request method is POST. If it is, retrieve the minimum and maximum amount values from the form data submitted by the user.
+#Convert these values to floating-point numbers.
+#Filter the transactions list based on the amount range specified by the user. Create a new list, filtered_transactions,
+#that contains only the transactions whose amount falls within the specified range. You can use a list comprehension for this.
+#Pass the filtered_transactions list to the transactions.html template using the render_template function.
+#In this template, display the transactions similar to the existing transactions.html template.
+#If the request method is GET, render a new template called search.html.
+#This template should contain a form that allows users to input the minimum and maximum amount values for the search.
+@app.route('/search', methods=['POST'])
+def search_transactions():
+    if request.method == 'POST':
+        # Extract the min and max values from the form fields
+        min_amount = float(request.form['min'])
+        max_amount = float(request.form['max'])
+        filtered = []
+        for transaction in transactions:
+            if transaction['amount']>=min and transaction['amount']<=max:
+                filtered.append(transaction)
+        return render_template("transactions.html", transactions=filtered)
+    
 # Run the Flask app
 if __name__ == "__main__":
     app.run(debug=True)
