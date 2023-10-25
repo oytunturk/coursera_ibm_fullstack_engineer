@@ -107,7 +107,7 @@ def search_transactions():
         for transaction in transactions:
             if transaction['amount']>=min and transaction['amount']<=max:
                 filtered.append(transaction)
-        return render_template("transactions.html", transactions=filtered)
+        return render_template("search.html", transactions=filtered)
     
 # Run the Flask app
 if __name__ == "__main__":
