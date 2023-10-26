@@ -1,4 +1,8 @@
-from sentiment_analysis import sentiment_analyzer_basic, sentiment_analyzer
+#This import will work before putting eveything in a package under SenstimentAnalysis
+#from sentiment_analysis import sentiment_analyzer_basic, sentiment_analyzer
+#This import works after packaging your functions
+from SentimentAnalysis import sentiment_analyzer_basic, sentiment_analyzer
+
 import json
 
 text = "I love this new technology"
