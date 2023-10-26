@@ -8,3 +8,7 @@ python3 test_sentiment_analysis.py
 python3 server.py
 
 #After running the server, go to localhost:5000 in your browser to test it
+
+#Now, perform static code analysis, normally this is done before packaging and testing your app
+python3 -m pip install pylint
+pylint server.py
