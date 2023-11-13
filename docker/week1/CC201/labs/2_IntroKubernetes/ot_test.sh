@@ -101,4 +101,4 @@ curl -L localhost:8001/api/v1/namespaces/sn-labs-oytunturk/services/hello-world/
 #Run it 10 times to see new Pods created. Kubernetes handles all these new Pod creation for you for load balancing
 for i in `seq 10`; do curl -L localhost:8001/api/v1/namespaces/sn-labs-oytunturk/services/hello-world/proxy; done
 
-
+#Return to the terminal window running the proxy command and kill it using Ctrl+C.
