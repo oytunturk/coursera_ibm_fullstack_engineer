@@ -5,7 +5,7 @@
       "title": "Task Organizer",
       "description": "Organize and maintain tasks"
     },
-    "host": "<Your application URL>",
+    "host": "oytunturk-5000.theiadocker-1-labs-prod-theiak8s-4-tor01.proxy.cognitiveclass.ai",
     "paths": {
       "/tasks": {
         "get": {
